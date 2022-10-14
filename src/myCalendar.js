@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction'
 import { INITIAL_EVENTS, createEventId } from './event-utils';
-
+import Modal from './Modal';
+import "./input.css" 
 
 
 export default function Calendario() {
 
+  const [showModal, setShowModal] = useState(false);
   const [eventi, setEventi] = useState([])
     
     return (
@@ -32,11 +34,13 @@ export default function Calendario() {
             eventsSet={handleEvents}
             eventContent={renderEventContent}
         />
+        <Modal props = {{ showModal, setShowModal }} />
       </div>
     );
 
     function handleDateSelect(selectInfo) {
-        let title = prompt('Please enter a new title for your event')
+        
+        let title = openModal()
         let calendarApi = selectInfo.view.calendar
     
         calendarApi.unselect() // clear date selection
@@ -73,4 +77,9 @@ export default function Calendario() {
         )
       }
     
+      function openModal() {
+        setShowModal(true)
+        let titolo = funzione()
+        return titolo
+      }
 }
