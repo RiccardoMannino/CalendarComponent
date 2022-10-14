@@ -79,7 +79,7 @@ export default function Calendario() {
     
       function openModal() {
         setShowModal(true)
-        let titolo = funzione()
+        let titolo = "ciao"
         return titolo
       }
 }
