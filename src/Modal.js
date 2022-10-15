@@ -1,49 +1,34 @@
 import React from "react";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { Dialog } from "@headlessui/react";
+import "./input.css";
 
 export default function CustomModal({
   title = "Title",
-  isOpen,
-  toggle,
+  open,
+  onClose,
   onCancel,
   cancelText,
   onSubmit,
   submitText,
   onDelete,
   deleteText,
-  children
+  children,
 }) {
   return (
-    <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader toggle={toggle}>{title}</ModalHeader>
-      <ModalBody>{children}</ModalBody>
-      <ModalFooter>
-        {/* {state.clickInfo && (
-          <Button color="primary" onClick={handleDelete}>
-            Delete
-          </Button>
-        )}
-        {state.clickInfo && (
-          <Button color="secondary" onClick={handleEdit}>
-            Edit
-          </Button>
-        )} */}
+    <Dialog open={open} onClose={onClose}>
+      <Dialog.Description onClose={onClose}>{title}</Dialog.Description>
+      {children}
+      <div>
         {onCancel && (
-          <Button color="secondary" onClick={onCancel}>
-            {cancelText || "Cancel"}
-          </Button>
+          <button onClick={onCancel}>{cancelText || "Cancel"}</button>
         )}
         {onDelete && (
-          <Button color="primary" onClick={onDelete}>
-            {deleteText || "Delete"}
-          </Button>
+          <button onClick={onDelete}>{deleteText || "Delete"}</button>
         )}
         {onSubmit && (
-          <Button color="primary" onClick={onSubmit}>
-            {submitText || "Submit"}
-          </Button>
+          <button onClick={onSubmit}>{submitText || "Submit"}</button>
         )}
-      </ModalFooter>
-    </Modal>
+      </div>
+    </Dialog>
   );
 }

@@ -1,3 +1,61 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root,
+.bg {
+  height: 100%;
+  font-family: "Montserrat", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.glass-component {
+  background: linear-gradient(
+    118.15deg,
+    rgba(255, 255, 255, 0.4) 17.42%,
+    rgba(255, 255, 255, 0.3) 68.14%
+  );
+  box-shadow: 0px 4px 24px -1px rgb(0 0 0 / 20%);
+  webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  padding: 1.5rem;
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.bg {
+  background: linear-gradient(180deg, #c3b5aa 0%, #504c54 100%);
+  box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+@layer components {
+  .btn {
+    @apply bg-[#d4c8b8] h-fit hover:bg-[#F2EFE6] text-[#F4EEEF] font-semibold hover:text-[#5d5d5d] py-2 px-4 border rounded-md
+    active:ring-1 active:outline-none 
+    active:ring-[#d4c8b8] transition duration-[0.333s] ease-out;
+  }
+  .btn-sm {
+    @apply bg-[#d4c8b8] h-fit hover:bg-[#F2EFE6] text-[#F4EEEF] font-semibold hover:text-[#5d5d5d] border rounded-md
+    active:ring-1 active:outline-none px-1 py-0
+    active:ring-[#d4c8b8] transition duration-[0.333s] ease-out;
+  }
+
+  .glass-component {
+    @apply rounded-md;
+  }
+  .bg {
+  }
+}

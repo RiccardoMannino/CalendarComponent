@@ -5,24 +5,14 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { nanoid } from "nanoid";
-import {
-  Row,
-  Col,
-  Button,
-  FormGroup,
-  Label,
-  Input,
-  Container
-} from "reactstrap";
-import DateRangePicker from "react-bootstrap-daterangepicker";
-
 import CustomModal from "./Modal";
+import DateRangePicker from "react-bootstrap-daterangepicker";
+import "./input.css";
 
 let todayStr = new Date().toISOString().replace(/T.*$/, "");
 
 export default function App() {
-
-  const [state, setState] = useState({}); 
+  const [state, setState] = useState({});
   const [currentEvents, setCurrentEvents] = useState([]);
   const [modal, setModal] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
@@ -38,13 +28,11 @@ export default function App() {
   };
 
   function handleDateSelect(selectInfo) {
-    if (
-      selectInfo.view.calendar
-    ) {
+    if (selectInfo.view.calendar) {
       selectInfo.view.calendar.unselect();
-      setState({ 
-        selectInfo, 
-        state: "create" 
+      setState({
+        selectInfo,
+        state: "create",
       });
       // Open modal create
       console.log("open modal create");
@@ -52,7 +40,6 @@ export default function App() {
       setEnd(selectInfo.end);
       setModal(true);
     }
-
   }
   function renderEventContent(eventInfo) {
     return (
@@ -61,7 +48,7 @@ export default function App() {
           style={{
             whiteSpace: "nowrap",
             overflow: "hidden",
-            textOverflow: "ellipsis"
+            textOverflow: "ellipsis",
           }}
         >
           {eventInfo.event.title}
@@ -77,7 +64,6 @@ export default function App() {
     setEnd(clickInfo.event.end);
 
     setModal(true);
-
   }
   function handleEvents(events) {
     setCurrentEvents(events);
@@ -92,11 +78,10 @@ export default function App() {
     setConfirmModal(true);
   }
   function handleEdit() {
-
     state.clickInfo.event.setStart(start);
     state.clickInfo.event.setEnd(end);
     state.clickInfo.event.mutate({
-      standardProps: { title }
+      standardProps: { title },
     });
     handleClose();
   }
@@ -106,17 +91,15 @@ export default function App() {
       title,
       start: state.selectInfo?.startStr || start.toISOString(),
       end: state.selectInfo?.endStr || end.toISOString(),
-      allDay: state.selectInfo?.allDay || false
+      allDay: state.selectInfo?.allDay || false,
     };
 
     let calendarApi = calendarRef.current.getApi();
-
 
     calendarApi.addEvent(newEvent);
     handleClose();
   }
   function handleDelete() {
-
     state.clickInfo.event.remove();
     handleClose();
   }
@@ -129,114 +112,91 @@ export default function App() {
   }
 
   return (
-    <div className="App">
-      <Container>
-        <Row style={{ marginBottom: 20 }}>
-          <Col
-            sm={{ size: 3 }}
-            md={{ size: 3 }}
-            style={{
-              paddingLeft: 15
-            }}
-          >
-          </Col>
-          <Col
-            sm={{ size: 3, offset: 6 }}
-            md={{ size: 3, offset: 6 }}
-            style={{
-              paddingRight: 15
-            }}
-          >
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <FullCalendar
-              ref={calendarRef}
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              headerToolbar={{
-                // left: "myCustomButton prev,today,next",
-                left: "prev,today,next",
-                center: "title",
-                right: "dayGridMonth,timeGridWeek,timeGridDay"
-              }}
-              buttonText={{
-                today: "current",
-                month: "month",
-                week: "week",
-                day: "day",
-                list: "list"
-              }}
-              initialView="timeGridWeek"
-              editable={true}
-              selectable={true}
-              selectMirror={true}
-              dayMaxEvents={true}
-              //
-              initialEvents={[
-                {
-                  id: nanoid(),
-                  title: "All-day event",
-                  start: todayStr
-                },
-                {
-                  id: nanoid(),
-                  title: "Timed event",
-                  start: todayStr + "T12:00:00",
-                  end: todayStr + "T12:30:00"
-                }
-              ]} // alternatively, use the `events` setting to fetch from a feed
-              select={handleDateSelect}
-              eventContent={renderEventContent} // custom render function
-              eventClick={handleEventClick}
-              eventDrop={handleEventDrop}
-              eventResize={handleEventResize}
-              //
-              // dateClick={handleDateClick}
-              eventAdd={(e) => {
-                console.log("eventAdd", e);
-              }}
-              eventChange={(e) => {
-                console.log("eventChange", e);
-              }}
-              eventRemove={(e) => {
-                console.log("eventRemove", e);
-              }}
-            />
-          </Col>
-        </Row>
-      </Container>
+    <div className="bg glass-component ">
+      <FullCalendar
+        ref={calendarRef}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        headerToolbar={{
+          // left: "myCustomButton prev,today,next",
+          left: "prev,today,next",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        }}
+        buttonText={{
+          today: "current",
+          month: "month",
+          week: "week",
+          day: "day",
+          list: "list",
+        }}
+        initialView="timeGridWeek"
+        editable={true}
+        selectable={true}
+        selectMirror={true}
+        dayMaxEvents={true}
+        //
+        initialEvents={[
+          {
+            id: nanoid(),
+            title: "All-day event",
+            start: todayStr,
+          },
+          {
+            id: nanoid(),
+            title: "Timed event",
+            start: todayStr + "T12:00:00",
+            end: todayStr + "T12:30:00",
+          },
+        ]} // alternatively, use the `events` setting to fetch from a feed
+        select={handleDateSelect}
+        eventContent={renderEventContent} // custom render function
+        eventClick={handleEventClick}
+        eventDrop={handleEventDrop}
+        eventResize={handleEventResize}
+        //
+        // dateClick={handleDateClick}
+        eventAdd={(e) => {
+          console.log("eventAdd", e);
+        }}
+        eventChange={(e) => {
+          console.log("eventChange", e);
+        }}
+        eventRemove={(e) => {
+          console.log("eventRemove", e);
+        }}
+      />
 
       <CustomModal
         title={state.state === "update" ? "Update Event" : "Add Event"}
-        isOpen={modal}
-        toggle={handleCloseModal}
+        open={modal}
+        onClose={handleCloseModal}
         onCancel={handleCloseModal}
         onSubmit={state.clickInfo ? handleEdit : handleSubmit}
         submitText={state.clickInfo ? "Update" : "Save"}
         onDelete={state.clickInfo && handleDelete}
         deleteText="Delete"
       >
-        <FormGroup>
-          <Label for="exampleEmail">Title</Label>
-          <Input
+        <form onSubmit={state.clickInfo ? handleEdit : handleSubmit}>
+          <p>Title</p>
+          <input
             type="text"
             name="title"
             placeholder="with a placeholder"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-        </FormGroup>
-        <FormGroup>
+        </form>
+      </CustomModal>
+      {/* <FormGroup>
           <Label for="exampleEmail">From - End</Label>
           <DateRangePicker
             initialSettings={{
               locale: {
-                format: "M/DD hh:mm A"
+                format: "M/DD hh:mm A",
               },
               startDate: start,
               endDate: end,
-              timePicker: true
+              timePicker: true,
             }}
             onApply={(event, picker) => {
               setStart(new Date(picker.startDate));
@@ -246,12 +206,12 @@ export default function App() {
             <input className="form-control" type="text" />
           </DateRangePicker>
         </FormGroup>
-      </CustomModal>
+       */}
 
       <CustomModal
         title={state.state === "resize" ? "Resize Event" : "Drop Event"}
-        isOpen={confirmModal}
-        toggle={() => {
+        open={confirmModal}
+        onClose={() => {
           state.checkInfo.revert();
           setConfirmModal(false);
         }}
@@ -268,4 +228,3 @@ export default function App() {
     </div>
   );
 }
-
