@@ -32,7 +32,7 @@ export default function App() {
       selectInfo.view.calendar.unselect();
       setState({
         selectInfo,
-        state: "create",
+        state: "creare",
       });
       // Open modal create
       console.log("open modal create");
@@ -44,15 +44,7 @@ export default function App() {
   function renderEventContent(eventInfo) {
     return (
       <div>
-        <i
-          style={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {eventInfo.event.title}
-        </i>
+        <i>{eventInfo.event.title}</i>
       </div>
     );
   }
@@ -69,7 +61,7 @@ export default function App() {
     setCurrentEvents(events);
   }
   function handleEventDrop(checkInfo) {
-    setState({ checkInfo, state: "drop" });
+    setState({ checkInfo, state: "spostare" });
     setConfirmModal(true);
   }
   function handleEventResize(checkInfo) {
@@ -112,76 +104,25 @@ export default function App() {
   }
 
   return (
-    <div className="bg glass-component ">
-      <FullCalendar
-        ref={calendarRef}
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        headerToolbar={{
-          // left: "myCustomButton prev,today,next",
-          left: "prev,today,next",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
-        }}
-        buttonText={{
-          today: "current",
-          month: "month",
-          week: "week",
-          day: "day",
-          list: "list",
-        }}
-        initialView="timeGridWeek"
-        editable={true}
-        selectable={true}
-        selectMirror={true}
-        dayMaxEvents={true}
-        //
-        initialEvents={[
-          {
-            id: nanoid(),
-            title: "All-day event",
-            start: todayStr,
-          },
-          {
-            id: nanoid(),
-            title: "Timed event",
-            start: todayStr + "T12:00:00",
-            end: todayStr + "T12:30:00",
-          },
-        ]} // alternatively, use the `events` setting to fetch from a feed
-        select={handleDateSelect}
-        eventContent={renderEventContent} // custom render function
-        eventClick={handleEventClick}
-        eventDrop={handleEventDrop}
-        eventResize={handleEventResize}
-        //
-        // dateClick={handleDateClick}
-        eventAdd={(e) => {
-          console.log("eventAdd", e);
-        }}
-        eventChange={(e) => {
-          console.log("eventChange", e);
-        }}
-        eventRemove={(e) => {
-          console.log("eventRemove", e);
-        }}
-      />
-
+    <div className="bg glass-component btn w-screen sd:container">
       <CustomModal
-        title={state.state === "update" ? "Update Event" : "Add Event"}
+        title={
+          state.state === "Aggiorna" ? "Aggiorna Evento" : "Aggiungi Evento"
+        }
         open={modal}
         onClose={handleCloseModal}
         onCancel={handleCloseModal}
         onSubmit={state.clickInfo ? handleEdit : handleSubmit}
-        submitText={state.clickInfo ? "Update" : "Save"}
+        submitText={state.clickInfo ? "Aggiorna" : "Salva"}
         onDelete={state.clickInfo && handleDelete}
-        deleteText="Delete"
+        deleteText="Cancella"
       >
         <form onSubmit={state.clickInfo ? handleEdit : handleSubmit}>
-          <p>Title</p>
+          <p>Titolo Evento</p>
           <input
             type="text"
             name="title"
-            placeholder="with a placeholder"
+            placeholder="inserisci evento"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -209,7 +150,7 @@ export default function App() {
        */}
 
       <CustomModal
-        title={state.state === "resize" ? "Resize Event" : "Drop Event"}
+        title={state.state === "resize" ? "Resize Event" : "Sposta Evento"}
         open={confirmModal}
         onClose={() => {
           state.checkInfo.revert();
@@ -219,12 +160,59 @@ export default function App() {
           state.checkInfo.revert();
           setConfirmModal(false);
         }}
-        cancelText="Cancel"
+        cancelText="Annulla"
         onSubmit={() => setConfirmModal(false)}
         submitText={"OK"}
       >
-        Do you want to {state.state} this event?
+        <p>Vuoi {state.state} questo evento?</p>
       </CustomModal>
+      <FullCalendar
+        ref={calendarRef}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        headerToolbar={{
+          // left: "myCustomButton prev,today,next",
+          left: "prev,today,next",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        }}
+        buttonText={{
+          today: "corrente",
+          month: "mese",
+          week: "settimana",
+          day: "giorno",
+          list: "list",
+        }}
+        initialView="timeGridWeek"
+        editable={true}
+        selectable={true}
+        selectMirror={true}
+        dayMaxEvents={true}
+        locale="it"
+        //
+        initialEvents={[
+          {
+            id: nanoid(),
+            title: "Graduation Day",
+            start: todayStr,
+          },
+        ]} // alternatively, use the `events` setting to fetch from a feed
+        select={handleDateSelect}
+        eventContent={renderEventContent} // custom render function
+        eventClick={handleEventClick}
+        eventDrop={handleEventDrop}
+        eventResize={handleEventResize}
+        //
+        // dateClick={handleDateClick}
+        eventAdd={(e) => {
+          console.log("eventAdd", e);
+        }}
+        eventChange={(e) => {
+          console.log("eventChange", e);
+        }}
+        eventRemove={(e) => {
+          console.log("eventRemove", e);
+        }}
+      />
     </div>
   );
 }
