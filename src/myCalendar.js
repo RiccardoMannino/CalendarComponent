@@ -43,7 +43,10 @@ export default function App() {
   }
   function renderEventContent(eventInfo) {
     return (
-      <div>
+      <div style={{
+        overflow: "hidden",
+        textOverflow: "ellipsis"
+      }}>
         <i>{eventInfo.event.title}</i>
       </div>
     );

@@ -15,13 +15,13 @@ export default function CustomModal({
 }) {
   return (
     open && (
-      <div open={open} onClose={onClose}>
+      <div style={{position:"absolute", top:"50%", left:"50%", zIndex:"1000"}} open={open} onClose={onClose}>
         <div onClose={onClose}>
           {title}
           {children}
 
           {onCancel && (
-            <button className="btn" onClick={onCancel}>
+            <button style={{background:"red"}} onClick={onCancel}>
               {cancelText || "Annulla"}
             </button>
           )}
