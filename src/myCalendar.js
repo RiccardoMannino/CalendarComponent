@@ -104,7 +104,7 @@ export default function App() {
   }
 
   return (
-    <div className="bg glass-component btn w-screen sd:container">
+    <div className="bg glass-component btn">
       <CustomModal
         title={
           state.state === "Aggiorna" ? "Aggiorna Evento" : "Aggiungi Evento"

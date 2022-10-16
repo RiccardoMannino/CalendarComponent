@@ -21,7 +21,9 @@ export default function CustomModal({
           {children}
 
           {onCancel && (
-            <button onClick={onCancel}>{cancelText || "Annulla"}</button>
+            <button className="btn" onClick={onCancel}>
+              {cancelText || "Annulla"}
+            </button>
           )}
           {onDelete && (
             <button onClick={onDelete}>{deleteText || "Delete"}</button>
