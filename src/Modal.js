@@ -11,7 +11,6 @@ export default function CustomModal({
   submitText,
   onDelete,
   deleteText,
-  className,
   children,
 }) {
   return (
@@ -31,9 +30,7 @@ export default function CustomModal({
           <div className="bg-red-600">{children}</div>
 
           {onCancel && (
-            <button className={className} onClick={onCancel}>
-              {cancelText || "Annulla"}
-            </button>
+            <button onClick={onCancel}>{cancelText || "Annulla"}</button>
           )}
           {onDelete && (
             <button onClick={onDelete}>{deleteText || "Delete"}</button>
