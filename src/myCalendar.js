@@ -11,7 +11,7 @@ import "./input.css";
 
 let todayStr = new Date().toISOString().replace(/T.*$/, "");
 
-export default function App() {
+export function Calendario() {
   const [state, setState] = useState({});
   const [currentEvents, setCurrentEvents] = useState([]);
   const [modal, setModal] = useState(false);
@@ -43,10 +43,12 @@ export default function App() {
   }
   function renderEventContent(eventInfo) {
     return (
-      <div style={{
-        overflow: "hidden",
-        textOverflow: "ellipsis"
-      }}>
+      <div
+        style={{
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
         <i>{eventInfo.event.title}</i>
       </div>
     );
@@ -107,7 +109,7 @@ export default function App() {
   }
 
   return (
-    <div className="bg glass-component btn">
+    <div className="container bg glass-component btn">
       <CustomModal
         title={
           state.state === "Aggiorna" ? "Aggiorna Evento" : "Aggiungi Evento"

@@ -1,9 +1,7 @@
-import Calendario from "./myCalendar.js";
+import { Calendario } from "./myCalendar.js";
 
 function App() {
-  return (
-    <Calendario />
-  );
+  return <Calendario />;
 }
 
 export default App;

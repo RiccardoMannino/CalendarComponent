@@ -11,17 +11,27 @@ export default function CustomModal({
   submitText,
   onDelete,
   deleteText,
+  className,
   children,
 }) {
   return (
     open && (
-      <div style={{position:"absolute", top:"50%", left:"50%", zIndex:"1000"}} open={open} onClose={onClose}>
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          zIndex: "1000",
+        }}
+        open={open}
+        onClose={onClose}
+      >
         <div onClose={onClose}>
           {title}
-          {children}
+          <div className="bg-red-600">{children}</div>
 
           {onCancel && (
-            <button style={{background:"red"}} onClick={onCancel}>
+            <button className={className} onClick={onCancel}>
               {cancelText || "Annulla"}
             </button>
           )}
