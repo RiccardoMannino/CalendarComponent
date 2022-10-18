@@ -16,6 +16,7 @@ body,
 .bg,
 .fc {
   height: 100%;
+  width: 100%;
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -71,4 +72,16 @@ body,
   }
   .bg {
   }
+}
+
+.modale {
+  position: absolute;
+  z-index: 1000;
+  background-color: red;
+}
+
+.box-bg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

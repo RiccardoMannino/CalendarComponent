@@ -16,27 +16,23 @@ export default function CustomModal({
   return (
     open && (
       <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          zIndex: "1000",
-        }}
+      className="glass-component btn modale"
         open={open}
         onClose={onClose}
       >
-        <div onClose={onClose}>
+        <div 
+        onClose={onClose}>
           {title}
-          <div className="bg-red-600">{children}</div>
+          <div>{children}</div>
 
           {onCancel && (
-            <button onClick={onCancel}>{cancelText || "Annulla"}</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={onCancel}>{cancelText || "Annulla"}</button>
           )}
           {onDelete && (
-            <button onClick={onDelete}>{deleteText || "Delete"}</button>
+            <button className="bg" onClick={onDelete}>{deleteText || "Delete"}</button>
           )}
           {onSubmit && (
-            <button onClick={onSubmit}>{submitText || "Submit"}</button>
+            <button className="bg" onClick={onSubmit}>{submitText || "Submit"}</button>
           )}
         </div>
       </div>

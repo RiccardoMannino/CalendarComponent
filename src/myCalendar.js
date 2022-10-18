@@ -65,24 +65,23 @@ export function Calendario() {
   function handleEvents(events) {
     setCurrentEvents(events);
   }
-  function handleEventDrop(checkInfo) {
-    setState({ checkInfo, state: "spostare" });
-    setConfirmModal(true);
-  }
-  function handleEventResize(checkInfo) {
-    // console.log(checkInfo);
-    setState({ checkInfo, state: "resize" });
-    setConfirmModal(true);
-  }
   function handleEdit() {
     state.clickInfo.event.setStart(start);
     state.clickInfo.event.setEnd(end);
+    if(!title) {
+      return
+    }
     state.clickInfo.event.mutate({
       standardProps: { title },
     });
     handleClose();
   }
   function handleSubmit() {
+
+    if(!title) {
+      return
+    }
+
     const newEvent = {
       id: nanoid(),
       title,
@@ -109,7 +108,7 @@ export function Calendario() {
   }
 
   return (
-    <div className="container bg glass-component btn">
+    <div className="container bg glass-component box-bg">
       <CustomModal
         title={
           state.state === "Aggiorna" ? "Aggiorna Evento" : "Aggiungi Evento"
@@ -153,24 +152,6 @@ export function Calendario() {
           </DateRangePicker>
         </FormGroup>
        */}
-
-      <CustomModal
-        title={state.state === "resize" ? "Resize Event" : "Sposta Evento"}
-        open={confirmModal}
-        onClose={() => {
-          state.checkInfo.revert();
-          setConfirmModal(false);
-        }}
-        onCancel={() => {
-          state.checkInfo.revert();
-          setConfirmModal(false);
-        }}
-        cancelText="Annulla"
-        onSubmit={() => setConfirmModal(false)}
-        submitText={"OK"}
-      >
-        <p>Vuoi {state.state} questo evento?</p>
-      </CustomModal>
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -204,8 +185,6 @@ export function Calendario() {
         select={handleDateSelect}
         eventContent={renderEventContent} // custom render function
         eventClick={handleEventClick}
-        eventDrop={handleEventDrop}
-        eventResize={handleEventResize}
         //
         // dateClick={handleDateClick}
         eventAdd={(e) => {
