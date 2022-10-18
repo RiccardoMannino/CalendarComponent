@@ -15,24 +15,25 @@ export default function CustomModal({
 }) {
   return (
     open && (
-      <div
-      className="glass-component btn modale"
-        open={open}
-        onClose={onClose}
-      >
-        <div 
-        onClose={onClose}>
+      <div className="glass-component btn modale" open={open} onClose={onClose}>
+        <div onClose={onClose}>
           {title}
           <div>{children}</div>
 
           {onCancel && (
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={onCancel}>{cancelText || "Annulla"}</button>
+            <button className="btn-sm mt-4 p-1" onClick={onCancel}>
+              {cancelText || "Annulla"}
+            </button>
           )}
           {onDelete && (
-            <button className="bg" onClick={onDelete}>{deleteText || "Delete"}</button>
+            <button className="btn-sm mt-4 ml-2 p-1" onClick={onDelete}>
+              {deleteText || "Delete"}
+            </button>
           )}
           {onSubmit && (
-            <button className="bg" onClick={onSubmit}>{submitText || "Submit"}</button>
+            <button className="btn-sm mt-4 ml-2 p-1" onClick={onSubmit}>
+              {submitText || "Submit"}
+            </button>
           )}
         </div>
       </div>

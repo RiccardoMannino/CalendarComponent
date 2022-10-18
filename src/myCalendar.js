@@ -65,21 +65,22 @@ export function Calendario() {
   function handleEvents(events) {
     setCurrentEvents(events);
   }
-  function handleEdit() {
+  function handleEdit(e) {
+    e.preventDefault();
     state.clickInfo.event.setStart(start);
     state.clickInfo.event.setEnd(end);
-    if(!title) {
-      return
+    if (!title) {
+      return;
     }
     state.clickInfo.event.mutate({
       standardProps: { title },
     });
     handleClose();
   }
-  function handleSubmit() {
-
-    if(!title) {
-      return
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!title) {
+      return;
     }
 
     const newEvent = {
@@ -108,10 +109,14 @@ export function Calendario() {
   }
 
   return (
-    <div className="container bg glass-component box-bg">
+    <div className="sd:container bg glass-component box-bg">
       <CustomModal
         title={
-          state.state === "Aggiorna" ? "Aggiorna Evento" : "Aggiungi Evento"
+          state.state === "Aggiorna" ? (
+            "Aggiorna Evento"
+          ) : (
+            <p className="text-[#5d5d5d] mb-3">Aggiungi Evento</p>
+          )
         }
         open={modal}
         onClose={handleCloseModal}
@@ -122,8 +127,9 @@ export function Calendario() {
         deleteText="Cancella"
       >
         <form onSubmit={state.clickInfo ? handleEdit : handleSubmit}>
-          <p>Titolo Evento</p>
+          <p className="text-[#5d5d5d] mb-3">Titolo Evento</p>
           <input
+            className="text-[#5d5d5d]"
             type="text"
             name="title"
             placeholder="inserisci evento"
@@ -168,7 +174,7 @@ export function Calendario() {
           day: "giorno",
           list: "list",
         }}
-        initialView="timeGridWeek"
+        initialView="dayGridMonth"
         editable={true}
         selectable={true}
         selectMirror={true}
@@ -185,17 +191,16 @@ export function Calendario() {
         select={handleDateSelect}
         eventContent={renderEventContent} // custom render function
         eventClick={handleEventClick}
-        //
         // dateClick={handleDateClick}
-        eventAdd={(e) => {
-          console.log("eventAdd", e);
-        }}
-        eventChange={(e) => {
-          console.log("eventChange", e);
-        }}
-        eventRemove={(e) => {
-          console.log("eventRemove", e);
-        }}
+        // eventAdd={(e) => {
+        //   console.log("eventAdd", e);
+        // }}
+        // eventChange={(e) => {
+        //   console.log("eventChange", e);
+        // }}
+        // eventRemove={(e) => {
+        //   console.log("eventRemove", e);
+        // }}
       />
     </div>
   );

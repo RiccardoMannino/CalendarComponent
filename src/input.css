@@ -36,15 +36,13 @@ body,
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-.bg,
-.fc {
+.bg {
   background: linear-gradient(180deg, #c3b5aa 0%, #504c54 100%);
   box-shadow: 0px 4px 24px -1px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 }
 
-.fc,
 .fc-dayGridMonth-view,
 .fc-timeGridWeek-view,
 .fc-timeGridDay-view {
@@ -77,7 +75,6 @@ body,
 .modale {
   position: absolute;
   z-index: 1000;
-  background-color: red;
 }
 
 .box-bg {
