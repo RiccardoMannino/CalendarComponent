@@ -129,7 +129,7 @@ export function Calendario() {
         <form onSubmit={state.clickInfo ? handleEdit : handleSubmit}>
           <p className="text-[#5d5d5d] mb-3">Titolo Evento</p>
           <input
-            className="text-[#5d5d5d]"
+            className="text-[#5d5d5d] rounded-md indent-1"
             type="text"
             name="title"
             placeholder="inserisci evento"
