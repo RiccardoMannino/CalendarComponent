@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 // import "@fullcalendar/common";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -6,21 +6,21 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { nanoid } from "nanoid";
 import CustomModal from "./Modal";
-import DateRangePicker from "react-bootstrap-daterangepicker";
+
 import "./input.css";
+import axios from "axios";
 
 let todayStr = new Date().toISOString().replace(/T.*$/, "");
 
 export function Calendario() {
   const [state, setState] = useState({});
   const [currentEvents, setCurrentEvents] = useState([]);
+  const [color, setColor] = useState("");
   const [modal, setModal] = useState(false);
-  const [confirmModal, setConfirmModal] = useState(false);
-  const calendarRef = useRef(null);
-
   const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date());
+  const calendarRef = useRef(null);
 
   const handleCloseModal = () => {
     handleClose();
@@ -41,18 +41,21 @@ export function Calendario() {
       setModal(true);
     }
   }
+
   function renderEventContent(eventInfo) {
     return (
       <div
         style={{
           overflow: "hidden",
           textOverflow: "ellipsis",
+          background: `${eventInfo.event.color}`,
         }}
       >
         <i>{eventInfo.event.title}</i>
       </div>
     );
   }
+
   function handleEventClick(clickInfo) {
     setState({ clickInfo, state: "update" });
     // set detail
@@ -62,23 +65,26 @@ export function Calendario() {
 
     setModal(true);
   }
+
   function handleEvents(events) {
     setCurrentEvents(events);
   }
+
   function handleEdit(e) {
     e.preventDefault();
     state.clickInfo.event.setStart(start);
     state.clickInfo.event.setEnd(end);
-    if (!title) {
-      return;
-    }
+
     state.clickInfo.event.mutate({
       standardProps: { title },
     });
+
     handleClose();
   }
+
   function handleSubmit(e) {
     e.preventDefault();
+
     if (!title) {
       return;
     }
@@ -86,6 +92,7 @@ export function Calendario() {
     const newEvent = {
       id: nanoid(),
       title,
+      color,
       start: state.selectInfo?.startStr || start.toISOString(),
       end: state.selectInfo?.endStr || end.toISOString(),
       allDay: state.selectInfo?.allDay || false,
@@ -94,12 +101,26 @@ export function Calendario() {
     let calendarApi = calendarRef.current.getApi();
 
     calendarApi.addEvent(newEvent);
+    setColor("");
     handleClose();
+    // axios
+    //   .post("http://localhost:1337/api/eventis", {
+    //     data: {
+    //       Title: title,
+    //       datastart: state.selectInfo?.startStr || start.toISOString(),
+    //       dataEnd: state.selectInfo?.endStr || end.toISOString(),
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   });
   }
+
   function handleDelete() {
     state.clickInfo.event.remove();
     handleClose();
   }
+
   function handleClose() {
     setTitle("");
     setStart(new Date());
@@ -136,33 +157,32 @@ export function Calendario() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+          <br />
+          <input
+            className="accent-red-700 mt-2 mr-1"
+            type="checkbox"
+            onChange={() => setColor((prev) => [...prev, "#FF0000"])}
+          />
+          <span className="mr-1">Rosso</span>
+          <input
+            className="accent-green-700 mt-2 mr-1"
+            type="checkbox"
+            onChange={() => setColor((prev) => [...prev, "#00ff00"])}
+          />
+          <span className="mr-1">Verde</span>
+          <input
+            className="accent-yellow-500 mt-2 mr-1"
+            type="checkbox"
+            onChange={() => setColor((prev) => [...prev, "#ffff00"])}
+          />
+          <span>Giallo</span>
         </form>
       </CustomModal>
-      {/* <FormGroup>
-          <Label for="exampleEmail">From - End</Label>
-          <DateRangePicker
-            initialSettings={{
-              locale: {
-                format: "M/DD hh:mm A",
-              },
-              startDate: start,
-              endDate: end,
-              timePicker: true,
-            }}
-            onApply={(event, picker) => {
-              setStart(new Date(picker.startDate));
-              setEnd(new Date(picker.endDate));
-            }}
-          >
-            <input className="form-control" type="text" />
-          </DateRangePicker>
-        </FormGroup>
-       */}
+
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         headerToolbar={{
-          // left: "myCustomButton prev,today,next",
           left: "prev,today,next",
           center: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay",
@@ -180,7 +200,6 @@ export function Calendario() {
         selectMirror={true}
         dayMaxEvents={true}
         locale="it"
-        //
         initialEvents={[
           {
             id: nanoid(),
@@ -191,16 +210,7 @@ export function Calendario() {
         select={handleDateSelect}
         eventContent={renderEventContent} // custom render function
         eventClick={handleEventClick}
-        // dateClick={handleDateClick}
-        // eventAdd={(e) => {
-        //   console.log("eventAdd", e);
-        // }}
-        // eventChange={(e) => {
-        //   console.log("eventChange", e);
-        // }}
-        // eventRemove={(e) => {
-        //   console.log("eventRemove", e);
-        // }}
+        //dateClick={handleDateClick}
       />
     </div>
   );

@@ -26,8 +26,6 @@ body,
   font-weight: 600;
 }
 
-.fc .fc-button-primary,
-.fc-button-primary:disabled,
 .fc-dayGridMonth-view,
 .fc-timeGridWeek-view,
 .fc-timeGridDay-view,
@@ -51,7 +49,7 @@ body,
 
 .fc .fc-button-primary,
 .fc-button-primary:disabled,
-.fc-event-main,
+/* .fc-event-main, */
 .fc-dayGridMonth-view,
 .fc-timeGridWeek-view,
 .fc-timeGridDay-view,
