@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 // import "@fullcalendar/common";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -6,15 +6,15 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { nanoid } from "nanoid";
 import CustomModal from "./Modal";
-
 import "./input.css";
-import axios from "axios";
+//import axios from "axios";
 
 let todayStr = new Date().toISOString().replace(/T.*$/, "");
 
 export function Calendario() {
   const [state, setState] = useState({});
   const [currentEvents, setCurrentEvents] = useState([]);
+  const [check, setCheck] = useState(false);
   const [color, setColor] = useState("");
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState("");
@@ -34,10 +34,12 @@ export function Calendario() {
         selectInfo,
         state: "creare",
       });
+
       // Open modal create
       console.log("open modal create");
       setStart(selectInfo.start);
       setEnd(selectInfo.end);
+
       setModal(true);
     }
   }
@@ -57,7 +59,7 @@ export function Calendario() {
   }
 
   function handleEventClick(clickInfo) {
-    setState({ clickInfo, state: "update" });
+    setState({ clickInfo, state: "Aggiorna" });
     // set detail
     setTitle(clickInfo.event.title);
     setStart(clickInfo.event.start);
@@ -72,11 +74,15 @@ export function Calendario() {
 
   function handleEdit(e) {
     e.preventDefault();
+
     state.clickInfo.event.setStart(start);
     state.clickInfo.event.setEnd(end);
 
     state.clickInfo.event.mutate({
-      standardProps: { title },
+      standardProps: {
+        title,
+        color,
+      },
     });
 
     handleClose();
@@ -107,9 +113,7 @@ export function Calendario() {
     //   .post("http://localhost:1337/api/eventis", {
     //     data: {
     //       Title: title,
-    //       datastart: state.selectInfo?.startStr || start.toISOString(),
-    //       dataEnd: state.selectInfo?.endStr || end.toISOString(),
-    //     },
+    //     }
     //   })
     //   .then((res) => {
     //     console.log(res);
@@ -127,6 +131,20 @@ export function Calendario() {
     setEnd(new Date());
     setState({});
     setModal(false);
+  }
+
+  function handleChange(e) {
+    if (color === "" && e.target.name === "rosso") {
+      setColor("#FF0000");
+    } else if (color === "" && e.target.name === "verde") {
+      return setColor("#00ff00");
+    } else if (color === "" && e.target.name === "giallo") {
+      setColor("#ffff00");
+    } else {
+      setColor("");
+    }
+
+    console.log(e.target);
   }
 
   return (
@@ -161,19 +179,22 @@ export function Calendario() {
           <input
             className="accent-red-700 mt-2 mr-1"
             type="checkbox"
-            onChange={() => setColor((prev) => [...prev, "#FF0000"])}
+            onChange={(e) => handleChange(e)}
+            name="rosso"
           />
           <span className="mr-1">Rosso</span>
           <input
             className="accent-green-700 mt-2 mr-1"
             type="checkbox"
-            onChange={() => setColor((prev) => [...prev, "#00ff00"])}
+            onChange={(e) => handleChange(e)}
+            name="verde"
           />
           <span className="mr-1">Verde</span>
           <input
             className="accent-yellow-500 mt-2 mr-1"
             type="checkbox"
-            onChange={() => setColor((prev) => [...prev, "#ffff00"])}
+            onChange={(e) => handleChange(e)}
+            name="giallo"
           />
           <span>Giallo</span>
         </form>
