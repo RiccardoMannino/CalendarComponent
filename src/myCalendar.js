@@ -1,13 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 // import "@fullcalendar/common";
 import FullCalendar from "@fullcalendar/react";
+import {Calendar} from "@fullcalendar/core";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import { nanoid } from "nanoid";
 import CustomModal from "./Modal";
 import "./input.css";
-//import axios from "axios";
+import axios from "axios";
 
 let todayStr = new Date().toISOString().replace(/T.*$/, "");
 
@@ -20,7 +22,20 @@ export function Calendario() {
   const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date());
+  const [eventi, setEventi] = useState({})
   const calendarRef = useRef(null);
+
+  function fetchEventi() {
+      fetch("http://localhost:1337/api/eventi")
+      .then((res) => res.json())
+      .then((res) => console.log(res))
+      .then((res) => setEventi(res.data))
+  }
+  
+  useEffect(() => {
+    fetchEventi();
+  }, [])
+  
 
   const handleCloseModal = () => {
     handleClose();
@@ -35,16 +50,12 @@ export function Calendario() {
         state: "creare",
       });
 
-      // Open modal create
-      console.log("open modal create");
-      setStart(selectInfo.start);
-      setEnd(selectInfo.end);
-
       setModal(true);
     }
   }
 
   function renderEventContent(eventInfo) {
+
     return (
       <div
         style={{
@@ -64,7 +75,6 @@ export function Calendario() {
     setTitle(clickInfo.event.title);
     setStart(clickInfo.event.start);
     setEnd(clickInfo.event.end);
-
     setModal(true);
   }
 
@@ -75,16 +85,18 @@ export function Calendario() {
   function handleEdit(e) {
     e.preventDefault();
 
-    state.clickInfo.event.setStart(start);
-    state.clickInfo.event.setEnd(end);
-
+    // state.clickInfo.event.setStart(start);
+    // state.clickInfo.event.setEnd(end);
+    
+    console.log(state.clickInfo.event);
+    
     state.clickInfo.event.mutate({
       standardProps: {
         title,
-        color,
       },
     });
 
+    setColor('');
     handleClose();
   }
 
@@ -99,8 +111,8 @@ export function Calendario() {
       id: nanoid(),
       title,
       color,
-      start: state.selectInfo?.startStr || start.toISOString(),
-      end: state.selectInfo?.endStr || end.toISOString(),
+      start: state.selectInfo?.startStr, 
+      end: state.selectInfo?.endStr, 
       allDay: state.selectInfo?.allDay || false,
     };
 
@@ -109,15 +121,25 @@ export function Calendario() {
     calendarApi.addEvent(newEvent);
     setColor("");
     handleClose();
-    // axios
-    //   .post("http://localhost:1337/api/eventis", {
-    //     data: {
-    //       Title: title,
-    //     }
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   });
+      fetch("http://localhost:1337/api/eventi", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          data: {
+            titolo: newEvent.title,
+            colore: newEvent.color,
+            oraInizio: newEvent.start,
+            oraFine: newEvent.end,
+            tuttoGiorno: newEvent.allDay
+          }
+        })
+      })
+      .then((res) => {
+        console.log(res);
+      })
   }
 
   function handleDelete() {
@@ -143,8 +165,6 @@ export function Calendario() {
     } else {
       setColor("");
     }
-
-    console.log(e.target);
   }
 
   return (
@@ -202,7 +222,8 @@ export function Calendario() {
 
       <FullCalendar
         ref={calendarRef}
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, googleCalendarPlugin]}
+        googleCalendarApiKey= "AIzaSyD1yLDSQM8RJMABDiyI3xVaRiYt1CAQ6Do"
         headerToolbar={{
           left: "prev,today,next",
           center: "title",
@@ -221,12 +242,15 @@ export function Calendario() {
         selectMirror={true}
         dayMaxEvents={true}
         locale="it"
-        initialEvents={[
+        events={[
           {
             id: nanoid(),
             title: "Graduation Day",
             start: todayStr,
           },
+          {
+            eventi
+          }
         ]} // alternatively, use the `events` setting to fetch from a feed
         select={handleDateSelect}
         eventContent={renderEventContent} // custom render function
