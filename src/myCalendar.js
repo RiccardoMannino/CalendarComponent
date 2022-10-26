@@ -16,26 +16,28 @@ let todayStr = new Date().toISOString().replace(/T.*$/, "");
 export function Calendario() {
   const [state, setState] = useState({});
   const [currentEvents, setCurrentEvents] = useState([]);
-  const [check, setCheck] = useState(false);
   const [color, setColor] = useState("");
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date());
-  const [eventi, setEventi] = useState({})
+  const [eventi, setEventi] = useState([])
   const calendarRef = useRef(null);
 
   function fetchEventi() {
       fetch("http://localhost:1337/api/eventi")
       .then((res) => res.json())
+      .then(res => setEventi(res.data))
       .then((res) => console.log(res))
-      .then((res) => setEventi(res.data))
   }
   
   useEffect(() => {
     fetchEventi();
   }, [])
   
+  useEffect(() => {
+    console.log(eventi);
+  }, [eventi])
 
   const handleCloseModal = () => {
     handleClose();
@@ -242,16 +244,18 @@ export function Calendario() {
         selectMirror={true}
         dayMaxEvents={true}
         locale="it"
-        events={[
-          {
-            id: nanoid(),
-            title: "Graduation Day",
-            start: todayStr,
-          },
-          {
-            eventi
+        events={
+          eventi?.map(evento => (
+            {
+              id: nanoid(),
+              title: evento.attributes.titolo,
+              color: evento.attributes.colore,
+              start: evento.attributes.oraInizio,
+              end: evento.attributes.oraFine,
+              allDay: evento.attributes.tuttoGiorno
           }
-        ]} // alternatively, use the `events` setting to fetch from a feed
+          ))
+        } // alternatively, use the `events` setting to fetch from a feed
         select={handleDateSelect}
         eventContent={renderEventContent} // custom render function
         eventClick={handleEventClick}
