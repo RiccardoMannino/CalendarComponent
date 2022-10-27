@@ -1,48 +1,49 @@
 import React, { useState, useRef, useEffect } from "react";
-// import "@fullcalendar/common";
 import FullCalendar from "@fullcalendar/react";
-import {Calendar} from "@fullcalendar/core";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import googleCalendarPlugin from '@fullcalendar/google-calendar';
-import { nanoid } from "nanoid";
 import CustomModal from "./Modal";
 import "./input.css";
-import axios from "axios";
-
-let todayStr = new Date().toISOString().replace(/T.*$/, "");
 
 export function Calendario() {
   const [state, setState] = useState({});
-  const [currentEvents, setCurrentEvents] = useState([]);
-  const [color, setColor] = useState("");
-  const [modal, setModal] = useState(false);
+
   const [title, setTitle] = useState("");
+  const [color, setColor] = useState("");
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date());
+  const [allDay, setAllDay] = useState(false);
+
   const [eventi, setEventi] = useState([])
+
+  const [modal, setModal] = useState(false);
   const calendarRef = useRef(null);
 
+
+  //FETCH EVENTI METHOD GET
   function fetchEventi() {
       fetch("http://localhost:1337/api/eventi")
       .then((res) => res.json())
       .then(res => setEventi(res.data))
-      .then((res) => console.log(res))
   }
   
+  //RENDER EVENTI ALL'APERTURA
   useEffect(() => {
     fetchEventi();
   }, [])
-  
-  useEffect(() => {
-    console.log(eventi);
-  }, [eventi])
 
-  const handleCloseModal = () => {
-    handleClose();
+
+  //CHIUSURA E RESET MODALE
+  function handleClose() {
+    setTitle("");
+    setColor("")
+    setStart(new Date());
+    setEnd(new Date());
+    setAllDay(false)
+    setState({});
     setModal(false);
-  };
+  }
 
   function handleDateSelect(selectInfo) {
     if (selectInfo.view.calendar) {
@@ -51,8 +52,10 @@ export function Calendario() {
         selectInfo,
         state: "creare",
       });
-
+      setStart(state.selectInfo.startStr)
+      setEnd(state.selectInfo.endStr)
       setModal(true);
+      setAllDay(state.allDay || false)
     }
   }
 
@@ -80,17 +83,11 @@ export function Calendario() {
     setModal(true);
   }
 
-  function handleEvents(events) {
-    setCurrentEvents(events);
-  }
-
   function handleEdit(e) {
     e.preventDefault();
 
     // state.clickInfo.event.setStart(start);
     // state.clickInfo.event.setEnd(end);
-    
-    console.log(state.clickInfo.event);
     
     state.clickInfo.event.mutate({
       standardProps: {
@@ -109,20 +106,18 @@ export function Calendario() {
       return;
     }
 
-    const newEvent = {
-      id: nanoid(),
-      title,
-      color,
-      start: state.selectInfo?.startStr, 
-      end: state.selectInfo?.endStr, 
-      allDay: state.selectInfo?.allDay || false,
-    };
+    // const newEvent = {
+    //   title,
+    //   color,
+    //   start, 
+    //   end,
+    //   allDay,
+    // };
 
-    let calendarApi = calendarRef.current.getApi();
+    // let calendarApi = calendarRef.current.getApi();
 
-    calendarApi.addEvent(newEvent);
-    setColor("");
-    handleClose();
+    // calendarApi.addEvent(newEvent);
+    // setColor("");
       fetch("http://localhost:1337/api/eventi", {
         method: "POST",
         headers: {
@@ -131,30 +126,22 @@ export function Calendario() {
         },
         body: JSON.stringify({
           data: {
-            titolo: newEvent.title,
-            colore: newEvent.color,
-            oraInizio: newEvent.start,
-            oraFine: newEvent.end,
-            tuttoGiorno: newEvent.allDay
+            titolo: title,
+            colore: color,
+            oraInizio: start,
+            oraFine: end,
+            tuttoGiorno: allDay
           }
         })
       })
-      .then((res) => {
-        console.log(res);
-      })
+      handleClose();
   }
 
+  //FETCH ELIMINA EVENTI
   function handleDelete() {
-    state.clickInfo.event.remove();
+    fetch(`http://localhost:1337/api/eventi/${state.clickInfo.event.id}`, {method: "DELETE"})
+    .then (fetchEventi)
     handleClose();
-  }
-
-  function handleClose() {
-    setTitle("");
-    setStart(new Date());
-    setEnd(new Date());
-    setState({});
-    setModal(false);
   }
 
   function handleChange(e) {
@@ -180,8 +167,8 @@ export function Calendario() {
           )
         }
         open={modal}
-        onClose={handleCloseModal}
-        onCancel={handleCloseModal}
+        onClose={handleClose}
+        onCancel={handleClose}
         onSubmit={state.clickInfo ? handleEdit : handleSubmit}
         submitText={state.clickInfo ? "Aggiorna" : "Salva"}
         onDelete={state.clickInfo && handleDelete}
@@ -224,7 +211,7 @@ export function Calendario() {
 
       <FullCalendar
         ref={calendarRef}
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, googleCalendarPlugin]}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         googleCalendarApiKey= "AIzaSyD1yLDSQM8RJMABDiyI3xVaRiYt1CAQ6Do"
         headerToolbar={{
           left: "prev,today,next",
@@ -247,7 +234,7 @@ export function Calendario() {
         events={
           eventi?.map(evento => (
             {
-              id: nanoid(),
+              id: evento.id,
               title: evento.attributes.titolo,
               color: evento.attributes.colore,
               start: evento.attributes.oraInizio,
