@@ -89,3 +89,14 @@ body,
   justify-content: center;
   align-items: center;
 }
+
+.checkColore{
+  height: 20px;
+  width: 20px;
+  outline: none;
+  outline-offset: none;
+  position: relative;
+  margin: 0 1rem 0 0 ;
+  cursor: pointer;
+  background-color: none;
+}

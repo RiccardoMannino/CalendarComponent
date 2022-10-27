@@ -37,7 +37,7 @@ export function Calendario() {
   //CHIUSURA E RESET MODALE
   function handleClose() {
     setTitle("");
-    setColor("")
+    setColor("");
     setStart(new Date());
     setEnd(new Date());
     setAllDay(false)
@@ -45,22 +45,25 @@ export function Calendario() {
     setModal(false);
   }
 
+  //SELEZIONA DATA CREAZIONE EVENTO
   function handleDateSelect(selectInfo) {
     if (selectInfo.view.calendar) {
+      console.log(selectInfo.view.calendar);
       selectInfo.view.calendar.unselect();
-      setState({
-        selectInfo,
-        state: "creare",
-      });
-      setStart(state.selectInfo.startStr)
-      setEnd(state.selectInfo.endStr)
+      // setState({
+      //   selectInfo,
+      //   state: "creare",
+      // });
+      setStart(selectInfo.startStr)
+      setEnd(selectInfo.endStr)
       setModal(true);
-      setAllDay(state.allDay || false)
+      setAllDay(selectInfo.allDay)
+      console.log(selectInfo);
     }
   }
 
+  //RENDERIZZAZIONE EVENTI
   function renderEventContent(eventInfo) {
-
     return (
       <div
         style={{
@@ -74,31 +77,44 @@ export function Calendario() {
     );
   }
 
+  //AGGIORNAMENTO EVENTI
   function handleEventClick(clickInfo) {
+    console.log(color);
     setState({ clickInfo, state: "Aggiorna" });
-    // set detail
     setTitle(clickInfo.event.title);
+    setColor(clickInfo.event.backgroundColor)
     setStart(clickInfo.event.start);
     setEnd(clickInfo.event.end);
+    setAllDay(clickInfo.event.allDay)
     setModal(true);
+    console.log(clickInfo);
   }
 
+  //MODIFICA EVENTO + FETCH METHOD PUT
   function handleEdit(e) {
     e.preventDefault();
+    fetch(`http://localhost:1337/api/eventi/${state.clickInfo.event.id}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          data: {
+            titolo: title,
+            colore: color,
+            oraInizio: start,
+            oraFine: end,
+            tuttoGiorno: allDay
+          }
+        })
+      })
+      .then(fetchEventi)
 
-    // state.clickInfo.event.setStart(start);
-    // state.clickInfo.event.setEnd(end);
-    
-    state.clickInfo.event.mutate({
-      standardProps: {
-        title,
-      },
-    });
-
-    setColor('');
     handleClose();
   }
 
+  //INVIO EVENTI + METHOD POST
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -106,18 +122,6 @@ export function Calendario() {
       return;
     }
 
-    // const newEvent = {
-    //   title,
-    //   color,
-    //   start, 
-    //   end,
-    //   allDay,
-    // };
-
-    // let calendarApi = calendarRef.current.getApi();
-
-    // calendarApi.addEvent(newEvent);
-    // setColor("");
       fetch("http://localhost:1337/api/eventi", {
         method: "POST",
         headers: {
@@ -134,7 +138,8 @@ export function Calendario() {
           }
         })
       })
-      handleClose();
+      .then(fetchEventi)
+      .then(handleClose)
   }
 
   //FETCH ELIMINA EVENTI
@@ -144,17 +149,47 @@ export function Calendario() {
     handleClose();
   }
 
+  useEffect(() => {
+    console.log(state);
+  })
+  //RIDIMENSIONAMENTO EVENTI (FETCH METHOD PUT)
+  function handleEventDropAndResize(checkInfo) {
+    setState({ checkInfo, state: "resize" });
+
+      fetch(`http://localhost:1337/api/eventi/${checkInfo.event.id}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          data: {
+            titolo: checkInfo.event.title,
+            colore: checkInfo.event.backgroundColor,
+            oraInizio: checkInfo.event.start,
+            oraFine: checkInfo.event.end,
+            tuttoGiorno: checkInfo.event.allDay
+          }
+        })
+      })
+      .then(fetchEventi)
+    handleClose();
+  }
+
+  //CAMBIO VALORE COLOR TRAMITE I TRE INPUT
   function handleChange(e) {
-    if (color === "" && e.target.name === "rosso") {
-      setColor("#FF0000");
-    } else if (color === "" && e.target.name === "verde") {
-      return setColor("#00ff00");
-    } else if (color === "" && e.target.name === "giallo") {
-      setColor("#ffff00");
+    if (e.target.checked) {
+      setColor(e.target.value);
     } else {
       setColor("");
-    }
+    } 
   }
+
+  //RENDERIZZAZIONE INPUT
+  const inputs = ["#FF0000", "#00ff00", "#ffff00", "#5d5d5d"];
+  const listInputs = inputs.map((inputcolor) =>
+       <input className="mr-2 checkColore" style={{accentColor: inputcolor}} type="radio" value={inputcolor} name="colore" onChange={(e) => handleChange(e)} />
+  );
 
   return (
     <div className="sd:container bg glass-component box-bg">
@@ -185,34 +220,13 @@ export function Calendario() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <br />
-          <input
-            className="accent-red-700 mt-2 mr-1"
-            type="checkbox"
-            onChange={(e) => handleChange(e)}
-            name="rosso"
-          />
-          <span className="mr-1">Rosso</span>
-          <input
-            className="accent-green-700 mt-2 mr-1"
-            type="checkbox"
-            onChange={(e) => handleChange(e)}
-            name="verde"
-          />
-          <span className="mr-1">Verde</span>
-          <input
-            className="accent-yellow-500 mt-2 mr-1"
-            type="checkbox"
-            onChange={(e) => handleChange(e)}
-            name="giallo"
-          />
-          <span>Giallo</span>
+          {listInputs}
         </form>
       </CustomModal>
 
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        googleCalendarApiKey= "AIzaSyD1yLDSQM8RJMABDiyI3xVaRiYt1CAQ6Do"
         headerToolbar={{
           left: "prev,today,next",
           center: "title",
@@ -244,9 +258,10 @@ export function Calendario() {
           ))
         } // alternatively, use the `events` setting to fetch from a feed
         select={handleDateSelect}
-        eventContent={renderEventContent} // custom render function
+        eventContent={renderEventContent} // RENDERIZZAZIONE E PERSONALIZZAZIONE EVENTI
         eventClick={handleEventClick}
-        //dateClick={handleDateClick}
+        eventResize={handleEventDropAndResize}
+        eventDrop={handleEventDropAndResize}
       />
     </div>
   );
