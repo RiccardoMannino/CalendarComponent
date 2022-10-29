@@ -8,15 +8,12 @@ import "./input.css";
 
 export function Calendario() {
   const [state, setState] = useState({});
-
   const [title, setTitle] = useState("");
   const [color, setColor] = useState("");
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date());
   const [allDay, setAllDay] = useState(false);
-
   const [eventi, setEventi] = useState([]);
-
   const [modal, setModal] = useState(false);
   const calendarRef = useRef(null);
 
@@ -48,10 +45,6 @@ export function Calendario() {
     if (selectInfo.view.calendar) {
       console.log(selectInfo.view.calendar);
       selectInfo.view.calendar.unselect();
-      // setState({
-      //   selectInfo,
-      //   state: "creare",
-      // });
       setStart(selectInfo.startStr);
       setEnd(selectInfo.endStr);
       setModal(true);
@@ -197,6 +190,7 @@ export function Calendario() {
 
   return (
     <div className="sd:container bg glass-component box-bg">
+      {/* MODALE PER AGGIUNGERE/AGGIORNARE EVENTI */}
       <CustomModal
         title={
           state.state === "Aggiorna" ? (
@@ -228,6 +222,8 @@ export function Calendario() {
         </form>
       </CustomModal>
 
+      {/* CALENDARIO */}
+
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -256,7 +252,7 @@ export function Calendario() {
           start: evento.attributes.oraInizio,
           end: evento.attributes.oraFine,
           allDay: evento.attributes.tuttoGiorno,
-        }))} // alternatively, use the `events` setting to fetch from a feed
+        }))} // EVENTI CARICATI DAL DATABASE
         select={handleDateSelect}
         eventContent={renderEventContent} // RENDERIZZAZIONE E PERSONALIZZAZIONE EVENTI
         eventClick={handleEventClick}
