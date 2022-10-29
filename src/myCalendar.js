@@ -15,24 +15,22 @@ export function Calendario() {
   const [end, setEnd] = useState(new Date());
   const [allDay, setAllDay] = useState(false);
 
-  const [eventi, setEventi] = useState([])
+  const [eventi, setEventi] = useState([]);
 
   const [modal, setModal] = useState(false);
   const calendarRef = useRef(null);
 
-
   //FETCH EVENTI METHOD GET
   function fetchEventi() {
-      fetch("http://localhost:1337/api/eventi")
+    fetch("http://localhost:1337/api/eventi")
       .then((res) => res.json())
-      .then(res => setEventi(res.data))
+      .then((res) => setEventi(res.data));
   }
-  
+
   //RENDER EVENTI ALL'APERTURA
   useEffect(() => {
     fetchEventi();
-  }, [])
-
+  }, []);
 
   //CHIUSURA E RESET MODALE
   function handleClose() {
@@ -40,7 +38,7 @@ export function Calendario() {
     setColor("");
     setStart(new Date());
     setEnd(new Date());
-    setAllDay(false)
+    setAllDay(false);
     setState({});
     setModal(false);
   }
@@ -54,10 +52,10 @@ export function Calendario() {
       //   selectInfo,
       //   state: "creare",
       // });
-      setStart(selectInfo.startStr)
-      setEnd(selectInfo.endStr)
+      setStart(selectInfo.startStr);
+      setEnd(selectInfo.endStr);
       setModal(true);
-      setAllDay(selectInfo.allDay)
+      setAllDay(selectInfo.allDay);
       console.log(selectInfo);
     }
   }
@@ -82,10 +80,10 @@ export function Calendario() {
     console.log(color);
     setState({ clickInfo, state: "Aggiorna" });
     setTitle(clickInfo.event.title);
-    setColor(clickInfo.event.backgroundColor)
+    setColor(clickInfo.event.backgroundColor);
     setStart(clickInfo.event.start);
     setEnd(clickInfo.event.end);
-    setAllDay(clickInfo.event.allDay)
+    setAllDay(clickInfo.event.allDay);
     setModal(true);
     console.log(clickInfo);
   }
@@ -94,22 +92,21 @@ export function Calendario() {
   function handleEdit(e) {
     e.preventDefault();
     fetch(`http://localhost:1337/api/eventi/${state.clickInfo.event.id}`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json"
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          titolo: title,
+          colore: color,
+          oraInizio: start,
+          oraFine: end,
+          tuttoGiorno: allDay,
         },
-        body: JSON.stringify({
-          data: {
-            titolo: title,
-            colore: color,
-            oraInizio: start,
-            oraFine: end,
-            tuttoGiorno: allDay
-          }
-        })
-      })
-      .then(fetchEventi)
+      }),
+    }).then(fetchEventi);
 
     handleClose();
   }
@@ -122,57 +119,57 @@ export function Calendario() {
       return;
     }
 
-      fetch("http://localhost:1337/api/eventi", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json"
+    fetch("http://localhost:1337/api/eventi", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          titolo: title,
+          colore: color,
+          oraInizio: start,
+          oraFine: end,
+          tuttoGiorno: allDay,
         },
-        body: JSON.stringify({
-          data: {
-            titolo: title,
-            colore: color,
-            oraInizio: start,
-            oraFine: end,
-            tuttoGiorno: allDay
-          }
-        })
-      })
+      }),
+    })
       .then(fetchEventi)
-      .then(handleClose)
+      .then(handleClose);
   }
 
   //FETCH ELIMINA EVENTI
   function handleDelete() {
-    fetch(`http://localhost:1337/api/eventi/${state.clickInfo.event.id}`, {method: "DELETE"})
-    .then (fetchEventi)
+    fetch(`http://localhost:1337/api/eventi/${state.clickInfo.event.id}`, {
+      method: "DELETE",
+    }).then(fetchEventi);
     handleClose();
   }
 
   useEffect(() => {
     console.log(state);
-  })
+  });
   //RIDIMENSIONAMENTO EVENTI (FETCH METHOD PUT)
   function handleEventDropAndResize(checkInfo) {
     setState({ checkInfo, state: "resize" });
 
-      fetch(`http://localhost:1337/api/eventi/${checkInfo.event.id}`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json"
+    fetch(`http://localhost:1337/api/eventi/${checkInfo.event.id}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          titolo: checkInfo.event.title,
+          colore: checkInfo.event.backgroundColor,
+          oraInizio: checkInfo.event.start,
+          oraFine: checkInfo.event.end,
+          tuttoGiorno: checkInfo.event.allDay,
         },
-        body: JSON.stringify({
-          data: {
-            titolo: checkInfo.event.title,
-            colore: checkInfo.event.backgroundColor,
-            oraInizio: checkInfo.event.start,
-            oraFine: checkInfo.event.end,
-            tuttoGiorno: checkInfo.event.allDay
-          }
-        })
-      })
-      .then(fetchEventi)
+      }),
+    }).then(fetchEventi);
     handleClose();
   }
 
@@ -182,14 +179,21 @@ export function Calendario() {
       setColor(e.target.value);
     } else {
       setColor("");
-    } 
+    }
   }
 
   //RENDERIZZAZIONE INPUT
-  const inputs = ["#FF0000", "#00ff00", "#ff00ff", "#5d5d5d"];
-  const listInputs = inputs.map((inputcolor) =>
-    <input className="option-input" style={{backgroundColor: inputcolor}} type="radio" value={inputcolor} name="colore" onChange={(e) => handleChange(e)} />
-  );
+  const inputs = ["#ff0000", "#00ff00", "#ff00ff", "#ffa500", "#5d5d5d"];
+  const listInputs = inputs.map((inputcolor) => (
+    <input
+      className="option-input"
+      style={{ backgroundColor: inputcolor }}
+      type="radio"
+      value={inputcolor}
+      name="colore"
+      onChange={(e) => handleChange(e)}
+    />
+  ));
 
   return (
     <div className="sd:container bg glass-component box-bg">
@@ -220,9 +224,7 @@ export function Calendario() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <br />
-          <div className="flex-box">
-          {listInputs}
-          </div>
+          <div className="flex-box">{listInputs}</div>
         </form>
       </CustomModal>
 
@@ -247,18 +249,14 @@ export function Calendario() {
         selectMirror={true}
         dayMaxEvents={true}
         locale="it"
-        events={
-          eventi?.map(evento => (
-            {
-              id: evento.id,
-              title: evento.attributes.titolo,
-              color: evento.attributes.colore,
-              start: evento.attributes.oraInizio,
-              end: evento.attributes.oraFine,
-              allDay: evento.attributes.tuttoGiorno
-          }
-          ))
-        } // alternatively, use the `events` setting to fetch from a feed
+        events={eventi?.map((evento) => ({
+          id: evento.id,
+          title: evento.attributes.titolo,
+          color: evento.attributes.colore,
+          start: evento.attributes.oraInizio,
+          end: evento.attributes.oraFine,
+          allDay: evento.attributes.tuttoGiorno,
+        }))} // alternatively, use the `events` setting to fetch from a feed
         select={handleDateSelect}
         eventContent={renderEventContent} // RENDERIZZAZIONE E PERSONALIZZAZIONE EVENTI
         eventClick={handleEventClick}

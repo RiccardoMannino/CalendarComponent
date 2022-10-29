@@ -99,19 +99,20 @@ body,
   color: #fff;
   cursor: pointer;
   margin-right: 0.5rem;
-  transition: 0.3 ease-in;
+  margin-top: 0.5rem;
   border-radius: 50%;
+}
+.option-input:hover {
+  transition: transform 0.3s ease 0s;
+  transform: scale(1.2);
 }
 
 .option-input:checked::before {
   width: 25px;
-  height: 30px;
+  height: 25px;
   position: absolute;
-  display:flex;
+  display: flex;
   content: url(./check.png);
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
 }
-
-
-
