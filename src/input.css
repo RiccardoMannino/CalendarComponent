@@ -90,13 +90,28 @@ body,
   align-items: center;
 }
 
-.checkColore{
-  height: 20px;
-  width: 20px;
-  outline: none;
-  outline-offset: none;
-  position: relative;
-  margin: 0 1rem 0 0 ;
+.option-input {
+  -webkit-appearance: none;
+
+  height: 25px;
+  width: 25px;
+  border: none;
+  color: #fff;
   cursor: pointer;
-  background-color: none;
+  margin-right: 0.5rem;
+  transition: 0.3 ease-in;
+  border-radius: 50%;
 }
+
+.option-input:checked::before {
+  width: 25px;
+  height: 30px;
+  position: absolute;
+  display:flex;
+  content: url(./check.png);
+  align-items:center;
+  justify-content:center;
+}
+
+
+

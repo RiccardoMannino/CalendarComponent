@@ -186,9 +186,9 @@ export function Calendario() {
   }
 
   //RENDERIZZAZIONE INPUT
-  const inputs = ["#FF0000", "#00ff00", "#ffff00", "#5d5d5d"];
+  const inputs = ["#FF0000", "#00ff00", "#ff00ff", "#5d5d5d"];
   const listInputs = inputs.map((inputcolor) =>
-       <input className="mr-2 checkColore" style={{accentColor: inputcolor}} type="radio" value={inputcolor} name="colore" onChange={(e) => handleChange(e)} />
+    <input className="option-input" style={{backgroundColor: inputcolor}} type="radio" value={inputcolor} name="colore" onChange={(e) => handleChange(e)} />
   );
 
   return (
@@ -220,7 +220,9 @@ export function Calendario() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <br />
+          <div className="flex-box">
           {listInputs}
+          </div>
         </form>
       </CustomModal>
 
