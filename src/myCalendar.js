@@ -43,13 +43,11 @@ export function Calendario() {
   //SELEZIONA DATA CREAZIONE EVENTO
   function handleDateSelect(selectInfo) {
     if (selectInfo.view.calendar) {
-      console.log(selectInfo.view.calendar);
       selectInfo.view.calendar.unselect();
       setStart(selectInfo.startStr);
       setEnd(selectInfo.endStr);
       setModal(true);
       setAllDay(selectInfo.allDay);
-      console.log(selectInfo);
     }
   }
 
@@ -70,7 +68,6 @@ export function Calendario() {
 
   //AGGIORNAMENTO EVENTI
   function handleEventClick(clickInfo) {
-    console.log(color);
     setState({ clickInfo, state: "Aggiorna" });
     setTitle(clickInfo.event.title);
     setColor(clickInfo.event.backgroundColor);
@@ -78,7 +75,6 @@ export function Calendario() {
     setEnd(clickInfo.event.end);
     setAllDay(clickInfo.event.allDay);
     setModal(true);
-    console.log(clickInfo);
   }
 
   //MODIFICA EVENTO + FETCH METHOD PUT
@@ -140,13 +136,8 @@ export function Calendario() {
     handleClose();
   }
 
-  useEffect(() => {
-    console.log(state);
-  });
   //RIDIMENSIONAMENTO EVENTI (FETCH METHOD PUT)
   function handleEventDropAndResize(checkInfo) {
-    setState({ checkInfo, state: "resize" });
-
     fetch(`http://localhost:1337/api/eventi/${checkInfo.event.id}`, {
       method: "PUT",
       headers: {
