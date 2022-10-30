@@ -177,8 +177,9 @@ export function Calendario() {
 
   //RENDERIZZAZIONE INPUT
   const inputs = ["#D50000", "#E67C73", "#F4511E", "#F6BF26", "#33B679", "#0B8043", "#3F51B5", "#655B68"];
-  const listInputs = inputs.map((inputcolor) => (
+  const listInputs = inputs.map((inputcolor, index) => (
     <input
+      key={index}
       className="option-input"
       style={{ backgroundColor: inputcolor }}
       type="radio"
@@ -210,7 +211,7 @@ export function Calendario() {
         <form onSubmit={state.clickInfo ? handleEdit : handleSubmit}>
           <p className="text-[#5d5d5d] mb-3">Titolo Evento</p>
           <input
-            className="text-[#5d5d5d] rounded-md indent-1"
+            className="text-[#5d5d5d] w-full rounded-md indent-1"
             type="text"
             name="title"
             placeholder="inserisci evento"
@@ -218,7 +219,7 @@ export function Calendario() {
             onChange={(e) => setTitle(e.target.value)}
           />
           <br />
-          <div className="flex-box">{listInputs}</div>
+          <div className="flex-box my-4">{listInputs}</div>
         </form>
       </CustomModal>
 
@@ -228,9 +229,8 @@ export function Calendario() {
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         headerToolbar={{
-          left: "prev,today,next",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
+          right: "prev,today,next dayGridMonth,timeGridWeek,timeGridDay",
+          left: "title",
         }}
         buttonText={{
           today: "corrente",

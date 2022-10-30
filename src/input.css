@@ -82,7 +82,6 @@ body,
 .modale {
   position: absolute;
   z-index: 1000;
-  width: 250px;
 }
 
 .box-bg {
@@ -106,7 +105,6 @@ body,
   color: #fff;
   cursor: pointer;
   margin-right: 0.5rem;
-  margin-top: 0.5rem;
   border-radius: 50%;
 }
 .option-input:hover {
@@ -136,5 +134,43 @@ body,
 
   50% {
     transform: scaleY(0.2);
+  }
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.75em;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
+  margin-left: 2.75em;
+}
+
+@media screen and (max-width: 708px) {
+  .fc .fc-toolbar {
+    flex-wrap: wrap;
+}
+
+.fc-toolbar-chunk {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.fc-button-group {
+  margin-top: 1rem;
+}
+}
+
+@media screen and (max-width: 520px) {  
+  .fc-toolbar-chunk {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
+    margin-left: 0;
   }
 }

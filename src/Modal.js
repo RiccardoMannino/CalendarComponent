@@ -21,17 +21,17 @@ export default function CustomModal({
           <div>{children}</div>
 
           {onCancel && (
-            <button className="btn-sm mt-4 p-1" onClick={onCancel}>
+            <button className="btn-sm p-1" onClick={onCancel}>
               {cancelText || "Annulla"}
             </button>
           )}
           {onDelete && (
-            <button className="btn-sm mt-4 ml-2 p-1" onClick={onDelete}>
+            <button className="btn-sm ml-2 p-1" onClick={onDelete}>
               {deleteText || "Delete"}
             </button>
           )}
           {onSubmit && (
-            <button className="btn-sm mt-4 ml-2 p-1" onClick={onSubmit}>
+            <button className="btn-sm ml-2 p-1" onClick={onSubmit}>
               {submitText || "Submit"}
             </button>
           )}
