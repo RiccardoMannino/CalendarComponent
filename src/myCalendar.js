@@ -176,7 +176,7 @@ export function Calendario() {
   }
 
   //RENDERIZZAZIONE INPUT
-  const inputs = ["#ff0000", "#00ff00", "#ff00ff", "#ffa500", "#5d5d5d"];
+  const inputs = ["#D50000", "#E67C73", "#F4511E", "#F6BF26", "#33B679", "#0B8043", "#3F51B5", "#655B68"];
   const listInputs = inputs.map((inputcolor) => (
     <input
       className="option-input"

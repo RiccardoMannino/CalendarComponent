@@ -82,6 +82,7 @@ body,
 .modale {
   position: absolute;
   z-index: 1000;
+  width: 250px;
 }
 
 .box-bg {
@@ -90,9 +91,15 @@ body,
   align-items: center;
 }
 
+.flex-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 .option-input {
   -webkit-appearance: none;
-
   height: 25px;
   width: 25px;
   border: none;
@@ -109,7 +116,7 @@ body,
 
 .option-input:checked::before {
   width: 25px;
-  height: 25px;
+  height: 30px;
   position: absolute;
   display: flex;
   content: url(./check.png);
