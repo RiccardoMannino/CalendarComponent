@@ -1,4 +1,4 @@
-import { Calendario } from "./myCalendar.js";
+import { Calendario } from "./Calendar/myCalendar.js";
 
 function App() {
   return <Calendario />;
