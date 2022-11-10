@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "eventis",
+  "info": {
+    "singularName": "eventi",
+    "pluralName": "eventis",
+    "displayName": "Eventi",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titolo": {
+      "type": "string"
+    },
+    "oraInizio": {
+      "type": "string"
+    },
+    "oraFine": {
+      "type": "string"
+    },
+    "tuttoGiorno": {
+      "type": "boolean"
+    },
+    "colore": {
+      "type": "string"
+    }
+  }
+}

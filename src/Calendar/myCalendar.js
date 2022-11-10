@@ -19,7 +19,7 @@ export function Calendario() {
 
   //FETCH EVENTI METHOD GET
   function fetchEventi() {
-    fetch("http://localhost:1337/api/eventi")
+    fetch("http://localhost:1337/api/eventis")
       .then((res) => res.json())
       .then((res) => setEventi(res.data));
   }
@@ -78,9 +78,10 @@ export function Calendario() {
   }
 
   //MODIFICA EVENTO + FETCH METHOD PUT
+
   function handleEdit(e) {
     e.preventDefault();
-    fetch(`http://localhost:1337/api/eventi/${state.clickInfo.event.id}`, {
+    fetch(`http://localhost:1337/api/eventis/${state.clickInfo.event.id}`, {
       method: "PUT",
       headers: {
         Accept: "application/json",
@@ -108,7 +109,7 @@ export function Calendario() {
       return;
     }
 
-    fetch("http://localhost:1337/api/eventi", {
+    fetch("http://localhost:1337/api/eventis", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -130,7 +131,7 @@ export function Calendario() {
 
   //FETCH ELIMINA EVENTI
   function handleDelete() {
-    fetch(`http://localhost:1337/api/eventi/${state.clickInfo.event.id}`, {
+    fetch(`http://localhost:1337/api/eventis/${state.clickInfo.event.id}`, {
       method: "DELETE",
     }).then(fetchEventi);
     handleClose();
@@ -138,7 +139,7 @@ export function Calendario() {
 
   //RIDIMENSIONAMENTO EVENTI (FETCH METHOD PUT)
   function handleEventDropAndResize(checkInfo) {
-    fetch(`http://localhost:1337/api/eventi/${checkInfo.event.id}`, {
+    fetch(`http://localhost:1337/api/eventis/${checkInfo.event.id}`, {
       method: "PUT",
       headers: {
         Accept: "application/json",
